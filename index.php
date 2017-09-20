@@ -14,52 +14,80 @@ if ($_POST)
     {
 
     //not empty
-    //atleast 6 character long
 
     $errors = array();
 
     //start validation
 
-    if(empty($_POST['firstname']))
+        if(empty($_POST['firstname']))
         {
         $errors['firstname1'] = "Votre Nom ne peut pas être vide";
 
         }
 
-    if(empty($_POST['lastname']))
+        if(strlen($_POST['firstname']) < 2 )
+        {
+        $errors['firstname2'] = "Ne peut pas être inférieur à 2 lettres";
+
+        }
+
+        if(empty($_POST['lastname']))
         {
         $errors['lastname1'] = "Votre Prénom ne peut pas être vide";
 
         }
 
-    if(empty($_POST['email']))
+        if(strlen($_POST['lastname']) < 2 )
+        {
+        $errors['lastname2'] = "Ne peut pas être inférieur à 2 lettres";
+
+        }
+
+        if(empty($_POST['email']))
         {
         $errors['email1'] = "Votre mail ne peut pas être vide";
 
         }
-    if(empty($_POST['message']))
+
+        if(strlen($_POST['email']) < 2)
+        {
+        $errors['email2'] = "Ne peut pas être inférieur à 2 lettres";
+
+        }
+
+        if(empty($_POST['message']))
         {
         $errors['message1'] = "Votre message ne peut pas être vide";
 
         }
-    if(empty($_POST['choice']))
+
+        if(strlen($_POST['message']) < 2)
+        {
+        $errors['message2'] = "Ne peut pas être inférieur à 2 lettres";
+
+        }
+
+        if(empty($_POST['choice']))
         {
         $errors['choice1'] = "Votre message ne peut pas être vide";
 
         }
-    if(strlen($_POST['phone']) < 10)
+
+        if(empty($_POST['phone']))
         {
-        $errors['phone1'] = "Ne peut pas contenir plus de 10 chiffres";
+        $errors['phone2'] = "Votre n° de tel ne peut pas être vide";
 
         }
-    if(empty($_POST['phone']))
+
+        if(strlen($_POST['phone']) < 10)
         {
-        $errors['phone2'] = "Votre message ne peut pas être vide";
+        $errors['phone1'] = "Ne peut pas contenir plus de 10 chiffres et être valide";
 
         }
+        
 
         // count error redirect success page
-    if(count($errors) == 0)
+        if(count($errors) == 0)
         {
             
             $firstname = $_POST['firstname'];
@@ -69,7 +97,7 @@ if ($_POST)
             $choice = $_POST['choice'];
             $message = $_POST['message'];
     
-            //message a l'atention du visiteur qui confirme l'envoi son message
+            //return message to writer
             echo "Votre Nom : " . $lastname . "<br>";
             echo "Votre Prénom : " . $firstname . "<br>";
             echo "Votre adresse mail : " . $email . "<br>";
@@ -79,7 +107,7 @@ if ($_POST)
             echo "Merci";
             
         }  
-    }
+        }
 ?>
 <header>
 <h1>Formulaire de contact</h1>
@@ -88,25 +116,28 @@ if ($_POST)
 <form method="post" action="" target="">
   <div>
     <label for="nom">Nom :</label>
-    <input type="text" id="nom" name="lastname" value="<?php if(isset($_POST['firstname'])) echo $_POST['firstname']; ?>" />
-    <p><?php if(isset($errors['firstname1'])) echo $errors['firstname1'];  ?></p>
+    <input type="text" id="nom" name="lastname" value="<?php if(isset($_POST['lastname'])) echo $_POST['lastname']; ?>" />
+    <p><?php if(isset($errors['lastname1'])) echo $errors['lastname1'];  ?></p>
+    <p><?php if(isset($errors['lastname2'])) echo $errors['lastname2'];  ?></p>
   </div>
 
   <div>
   <label for="prenom">Prénom :</label>
-  <input type="text" id="prenom" name="firstname" value="<?php if(isset($_POST['lastname'])) echo $_POST['lastname']; ?>" />
-    <p><?php if(isset($errors['lastname1'])) echo $errors['lastname1'];  ?></p>
+  <input type="text" id="prenom" name="firstname" value="<?php if(isset($_POST['firstname'])) echo $_POST['firstname']; ?>" />
+    <p><?php if(isset($errors['firstname1'])) echo $errors['firstname1'];  ?></p>
+    <p><?php if(isset($errors['firstname2'])) echo $errors['firstname2'];  ?></p>
   </div>
 
   <div>
     <label for="courriel">Courriel :</label>
-    <input type="email" id="courriel" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>" />
+    <input type="email" id="courriel" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>" pattern="^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$" />
     <p><?php if(isset($errors['email1'])) echo $errors['email1'];  ?></p>
+    <p><?php if(isset($errors['email2'])) echo $errors['email2'];  ?></p>
   </div>
 
   <div>
     <label for="tel">Téléphone :</label>
-    <input type="number" name="phone" value="<?php if(isset($_POST['phone'])) echo $_POST['phone']; ?>" pattern="^(?:0|\(?\+33\)?\s?|0033\s?)[1-79](?:[\.\-\s]?\d\d){4}$">
+    <input type="text" name="phone" value="<?php if(isset($_POST['phone'])) echo $_POST['phone']; ?>" pattern="^(?:0|\(?\+33\)?\s?|0033\s?)[1-79](?:[\.\-\s]?\d\d){4}$" />
     <p><?php if(isset($errors['phone1'])) echo $errors['phone1'];  ?></p>
     <p><?php if(isset($errors['phone2'])) echo $errors['phone2'];  ?></p>
   </div>
@@ -114,8 +145,8 @@ if ($_POST)
   <div>
     <label for="choice">Votre choix :</label>
         <select name="choice"> 
-            <option value="Rappel">Vous souhaiter être rappeler</option>
-            <option value="Message">Message important</option>
+            <option value="Vous souhaiter être rappeler">Vous souhaiter être rappeler</option>
+            <option value="Message Important">Message important</option>
             <option value="Mécontent">Mécontent</option>
         </select>
     </div>
